@@ -1,5 +1,6 @@
 from langchain_ollama import ChatOllama
-from langchain_core.messages import SystemMessage, HumanMessage
+
+from prompts import research_prompt
 
 
 model = ChatOllama(
@@ -8,23 +9,21 @@ model = ChatOllama(
 )
 
 
-question = input("You: ")
+chain = research_prompt | model
 
 
-messages = [
-    SystemMessage(
-        content="""
-        You are Atlas, an AI research assistant.
-
-        Explain technical concepts accurately and clearly.
-        Keep answers concise unless additional detail is requested.
-        """
-    ),
-    HumanMessage(content=question)
-]
+topic = input("Topic: ")
+audience = input("Audience: ")
+detail_level = input("Detail level: ")
 
 
-response = model.invoke(messages)
+response = chain.invoke(
+    {
+        "topic": topic,
+        "audience": audience,
+        "detail_level": detail_level
+    }
+)
 
 
-print(f"\nAtlas: {response.content}")
+print(f"\nAtlas:\n{response.content}")
