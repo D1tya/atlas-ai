@@ -1,3 +1,4 @@
+import sqlite3
 from typing import Annotated
 
 from langchain_core.messages import (
@@ -5,6 +6,9 @@ from langchain_core.messages import (
 )
 from langchain_ollama import ChatOllama
 
+from langgraph.checkpoint.sqlite import (
+    SqliteSaver,
+)
 from langgraph.graph import (
     END,
     START,
@@ -20,6 +24,7 @@ from langgraph.prebuilt import (
 from typing_extensions import TypedDict
 
 from config import (
+    DATABASE_PATH,
     MODEL_NAME,
     TEMPERATURE,
 )
@@ -101,4 +106,17 @@ graph_builder.add_edge(
 )
 
 
-atlas_graph = graph_builder.compile()
+database_connection = sqlite3.connect(
+    DATABASE_PATH,
+    check_same_thread=False,
+)
+
+
+checkpointer = SqliteSaver(
+    database_connection
+)
+
+
+atlas_graph = graph_builder.compile(
+    checkpointer=checkpointer
+)

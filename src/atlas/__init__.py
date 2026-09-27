@@ -1,0 +1,1 @@
+"""Atlas agentic research assistant."""

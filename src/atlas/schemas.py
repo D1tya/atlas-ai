@@ -5,7 +5,9 @@ from pydantic import BaseModel, Field
 
 class ResearchResponse(BaseModel):
     topic: str = Field(
-        description="Canonical name of the research topic."
+        description=(
+            "Canonical name of the research topic."
+        )
     )
 
     summary: str = Field(
@@ -29,5 +31,7 @@ class ResearchResponse(BaseModel):
         "intermediate",
         "advanced",
     ] = Field(
-        description="Technical difficulty of the topic."
+        description=(
+            "Technical difficulty of the topic."
+        )
     )

@@ -5,7 +5,9 @@ from config import MAX_SEARCH_RESULTS
 
 
 @tool
-def web_search(query: str) -> str:
+def web_search(
+    query: str,
+) -> str:
     """Search the web for current information.
 
     Use this tool for recent events, news,
@@ -49,7 +51,9 @@ def web_search(query: str) -> str:
         )
 
     if not formatted_results:
-        return "No search results found."
+        return (
+            "No search results found."
+        )
 
     return "\n\n".join(
         formatted_results
