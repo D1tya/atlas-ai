@@ -9,19 +9,25 @@ class ResearchResponse(BaseModel):
     )
 
     summary: str = Field(
-        description="Clear explanation appropriate for the requested audience."
+        description=(
+            "Clear explanation appropriate for "
+            "the requested audience."
+        )
     )
 
     key_concepts: list[str] = Field(
         min_length=3,
         max_length=7,
-        description="Three to seven important concepts related to the topic."
+        description=(
+            "Three to seven important concepts "
+            "related to the topic."
+        ),
     )
 
     difficulty: Literal[
         "beginner",
         "intermediate",
-        "advanced"
+        "advanced",
     ] = Field(
         description="Technical difficulty of the topic."
     )

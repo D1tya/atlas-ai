@@ -1,17 +1,16 @@
-from datetime import datetime
-
 from langchain_core.tools import tool
 
 
 @tool
-def calculator(a: float, b: float, operation: str) -> float:
+def calculator(
+    a: float,
+    b: float,
+    operation: str,
+) -> float:
     """Perform arithmetic using two numbers.
 
-    Supported operations:
-    - add
-    - subtract
-    - multiply
-    - divide
+    Supported operations are add, subtract,
+    multiply, and divide.
     """
 
     if operation == "add":
@@ -25,17 +24,12 @@ def calculator(a: float, b: float, operation: str) -> float:
 
     if operation == "divide":
         if b == 0:
-            raise ValueError("Cannot divide by zero.")
+            raise ValueError(
+                "Cannot divide by zero."
+            )
 
         return a / b
 
     raise ValueError(
         f"Unsupported operation: {operation}"
     )
-
-
-@tool
-def get_current_datetime() -> str:
-    """Return the current local date and time."""
-
-    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
