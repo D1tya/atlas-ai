@@ -1,6 +1,7 @@
 from langchain_ollama import ChatOllama
 
 from prompts import research_prompt
+from schemas import ResearchResponse
 
 
 model = ChatOllama(
@@ -9,7 +10,12 @@ model = ChatOllama(
 )
 
 
-chain = research_prompt | model
+structured_model = model.with_structured_output(
+    ResearchResponse
+)
+
+
+chain = research_prompt | structured_model
 
 
 topic = input("Topic: ")
@@ -26,4 +32,16 @@ response = chain.invoke(
 )
 
 
-print(f"\nAtlas:\n{response.content}")
+print("\nAtlas Research Result")
+print("---------------------")
+
+print(f"Topic: {response.topic}")
+print(f"Difficulty: {response.difficulty}")
+
+print("\nSummary:")
+print(response.summary)
+
+print("\nKey Concepts:")
+
+for concept in response.key_concepts:
+    print(f"- {concept}")
