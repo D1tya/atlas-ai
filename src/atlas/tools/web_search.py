@@ -1,19 +1,12 @@
 from ddgs import DDGS
-from langchain_core.tools import tool
 
 from config import MAX_SEARCH_RESULTS
 
 
-@tool
-def web_search(
+def search_web(
     query: str,
-) -> str:
-    """Search the web for current information.
-
-    Use this tool for recent events, news,
-    current information, or information that
-    may have changed since model training.
-    """
+) -> list[dict[str, str]]:
+    """Search the web and return structured results."""
 
     results = DDGS().text(
         query,
@@ -22,39 +15,23 @@ def web_search(
 
     formatted_results = []
 
-    for index, result in enumerate(
-        results,
-        start=1,
-    ):
-        title = result.get(
-            "title",
-            "No title",
-        )
-
-        url = result.get(
-            "href",
-            "No URL",
-        )
-
-        body = result.get(
-            "body",
-            "No description",
-        )
-
+    for result in results:
         formatted_results.append(
-            (
-                f"Result {index}\n"
-                f"Title: {title}\n"
-                f"URL: {url}\n"
-                f"Summary: {body}"
-            )
+            {
+                "title": result.get(
+                    "title",
+                    "Untitled",
+                ),
+                "url": result.get(
+                    "href",
+                    "",
+                ),
+                "snippet": result.get(
+                    "body",
+                    "",
+                ),
+                "query": query,
+            }
         )
 
-    if not formatted_results:
-        return (
-            "No search results found."
-        )
-
-    return "\n\n".join(
-        formatted_results
-    )
+    return formatted_results

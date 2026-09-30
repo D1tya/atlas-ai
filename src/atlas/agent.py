@@ -5,7 +5,6 @@ from langchain_core.messages import (
 )
 
 from graph import atlas_graph
-from prompts import SYSTEM_MESSAGE
 
 
 class AtlasAgent:
@@ -22,7 +21,9 @@ class AtlasAgent:
 
         self.config = {
             "configurable": {
-                "thread_id": self.thread_id
+                "thread_id": (
+                    self.thread_id
+                )
             }
         }
 
@@ -31,47 +32,34 @@ class AtlasAgent:
         question: str,
     ) -> str:
 
-        current_state = (
-            atlas_graph.get_state(
-                self.config
-            )
-        )
-
-        messages = (
-            current_state.values.get(
-                "messages",
-                [],
-            )
-        )
-
-        if messages:
-
-            input_messages = [
-                HumanMessage(
-                    content=question
-                )
-            ]
-
-        else:
-
-            input_messages = [
-                SYSTEM_MESSAGE,
-                HumanMessage(
-                    content=question
-                ),
-            ]
-
         result = atlas_graph.invoke(
             {
-                "messages": input_messages
+                "messages": [
+                    HumanMessage(
+                        content=question
+                    )
+                ],
+                "question": question,
+                "research_plan": {},
+                "sources": [],
+                "research_notes": "",
+                "draft_answer": "",
+                "critique": {},
             },
             config=self.config,
         )
 
-        final_message = (
-            result["messages"][-1]
+        messages = result.get(
+            "messages",
+            [],
         )
 
+        if not messages:
+            return (
+                "Atlas could not generate "
+                "a response."
+            )
+
         return str(
-            final_message.content
+            messages[-1].content
         )

@@ -4,52 +4,42 @@ from agent import AtlasAgent
 def main() -> None:
 
     print(
-        "\nAtlas Research Assistant"
+        "\n"
+        "================================\n"
+        "       ATLAS RESEARCH AI\n"
+        "================================"
     )
 
     print(
-        "Powered by LangChain + LangGraph"
+        "LangChain + LangGraph + Ollama"
     )
 
     print(
-        "Persistent conversation memory enabled."
-    )
-
-    print(
-        "\nEnter an existing thread ID to "
-        "continue a conversation."
-    )
-
-    print(
-        "Press Enter to start a new one.\n"
+        "Local-first agentic research system\n"
     )
 
     thread_id = input(
-        "Thread ID: "
+        "Existing conversation ID "
+        "(Enter for new): "
     ).strip()
 
-    if thread_id:
-
-        agent = AtlasAgent(
-            thread_id=thread_id
+    agent = AtlasAgent(
+        thread_id=(
+            thread_id or None
         )
-
-    else:
-
-        agent = AtlasAgent()
-
-    print(
-        f"\nConversation ID: "
-        f"{agent.thread_id}"
     )
 
     print(
-        "Save this ID if you want to "
-        "continue this conversation later."
+        f"\nConversation ID:\n"
+        f"{agent.thread_id}\n"
     )
 
     print(
-        "Type 'exit' to quit.\n"
+        "Commands:"
+    )
+
+    print(
+        "  exit  - quit Atlas\n"
     )
 
     while True:
@@ -79,15 +69,33 @@ def main() -> None:
             )
 
             print(
-                f"\nAtlas: {response}\n"
+                "\nAtlas:\n"
+            )
+
+            print(
+                response
+            )
+
+            print()
+
+        except KeyboardInterrupt:
+
+            print(
+                "\n\nAtlas: Research cancelled.\n"
             )
 
         except Exception as error:
 
             print(
-                "\nAtlas encountered an "
-                f"error: {error}\n"
+                "\nAtlas encountered "
+                "an error:\n"
             )
+
+            print(
+                error
+            )
+
+            print()
 
 
 if __name__ == "__main__":

@@ -9,8 +9,8 @@ def calculator(
 ) -> float:
     """Perform arithmetic using two numbers.
 
-    Supported operations are add, subtract,
-    multiply, and divide.
+    Supported operations:
+    add, subtract, multiply, divide.
     """
 
     if operation == "add":

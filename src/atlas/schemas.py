@@ -3,35 +3,53 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 
-class ResearchResponse(BaseModel):
-    topic: str = Field(
+class ResearchPlan(BaseModel):
+    requires_research: bool = Field(
         description=(
-            "Canonical name of the research topic."
+            "Whether external web research is "
+            "required to answer the question."
         )
     )
 
-    summary: str = Field(
+    reasoning: str = Field(
         description=(
-            "Clear explanation appropriate for "
-            "the requested audience."
+            "Brief reason for the research decision."
         )
     )
 
-    key_concepts: list[str] = Field(
-        min_length=3,
-        max_length=7,
+    search_queries: list[str] = Field(
+        default_factory=list,
+        max_length=3,
         description=(
-            "Three to seven important concepts "
-            "related to the topic."
+            "Focused search queries to use when "
+            "research is required."
         ),
     )
 
-    difficulty: Literal[
-        "beginner",
-        "intermediate",
-        "advanced",
-    ] = Field(
+    answer_type: Literal[
+        "direct",
+        "research",
+    ]
+
+
+class CritiqueResult(BaseModel):
+    passed: bool = Field(
         description=(
-            "Technical difficulty of the topic."
+            "Whether the research answer is sufficiently "
+            "supported, relevant, and complete."
         )
     )
+
+    feedback: str = Field(
+        description=(
+            "Specific feedback for improving the answer."
+        )
+    )
+
+
+class Source(BaseModel):
+    title: str
+    url: str
+    snippet: str
+    query: str
+    content: str = ""
